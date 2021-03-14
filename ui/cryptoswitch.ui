@@ -38,7 +38,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="text">
      <attribute name="title">
@@ -110,7 +110,7 @@
        <rect>
         <x>20</x>
         <y>150</y>
-        <width>261</width>
+        <width>541</width>
         <height>21</height>
        </rect>
       </property>
@@ -123,7 +123,7 @@
        <rect>
         <x>20</x>
         <y>320</y>
-        <width>261</width>
+        <width>541</width>
         <height>21</height>
        </rect>
       </property>
@@ -139,8 +139,8 @@
      <widget class="QPushButton" name="SelectInFileBtn">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>50</y>
+        <x>30</x>
+        <y>40</y>
         <width>221</width>
         <height>41</height>
        </rect>
@@ -153,8 +153,8 @@
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>60</y>
-        <width>251</width>
+        <y>80</y>
+        <width>531</width>
         <height>21</height>
        </rect>
       </property>
@@ -172,8 +172,8 @@
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>110</y>
-        <width>251</width>
+        <y>160</y>
+        <width>531</width>
         <height>21</height>
        </rect>
       </property>
@@ -190,11 +190,16 @@
      <widget class="QPushButton" name="selectOutFileBtn">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>100</y>
+        <x>30</x>
+        <y>120</y>
         <width>221</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Ubuntu Mono derivative Powerline</family>
+       </font>
       </property>
       <property name="text">
        <string>Выбрать выходной файл</string>
@@ -517,16 +522,6 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAboutProgram">
-   <property name="text">
-    <string>О программе</string>
-   </property>
-  </action>
-  <action name="ActionAboutAuthor">
-   <property name="text">
-    <string>Об авторе</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

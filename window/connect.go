@@ -2,6 +2,7 @@ package window
 
 import (
 	"fmt"
+
 	"github.com/elizarpif/diploma-elliptic/cryptoswitch"
 )
 
@@ -9,10 +10,10 @@ func (w *Window) Connect() {
 	ww := w.uiWindow
 
 	ww.EncryptBtn.ConnectClicked(func(checked bool) {
-		go w.EncryptData()
+		go w.Encrypt()
 	})
 	ww.DecryptBtn.ConnectClicked(func(checked bool) {
-		go w.DecryptData()
+		go w.Decrypt()
 	})
 
 	ww.GenerateBtn.ConnectClicked(func(checked bool) {
@@ -24,6 +25,14 @@ func (w *Window) Connect() {
 	})
 	ww.CipherText.ConnectTextChanged(func() {
 		w.countCipherTextSymbols()
+	})
+
+	ww.SelectInFileBtn.ConnectClicked(func(checked bool) {
+		w.SelectInFile()
+	})
+
+	ww.SelectOutFileBtn.ConnectClicked(func(checked bool) {
+		w.SelectOutFile()
 	})
 }
 
