@@ -3,7 +3,7 @@ package window
 import (
 	"fmt"
 
-	"github.com/elizarpif/diploma-elliptic/cryptoswitch"
+	"github.com/elizarpif/cryptoswitch"
 )
 
 func (w *Window) Connect() {
@@ -31,6 +31,15 @@ func (w *Window) Connect() {
 		w.SelectInFile()
 	})
 
+	ww.CipherSwitch.ConnectCurrentIndexChanged(func(index int) {
+		if index == int(cryptoswitch.DES) {
+			ww.CbcRadio.SetChecked(true)
+			ww.GcmRadio.SetEnabled(false)
+		} else {
+			ww.GcmRadio.SetEnabled(true)
+		}
+	})
+
 	ww.SelectOutFileBtn.ConnectClicked(func(checked bool) {
 		w.SelectOutFile()
 	})
@@ -42,8 +51,10 @@ func (w *Window) selectCipher() cryptoswitch.Cipher {
 	case 0:
 		return cryptoswitch.AES
 	case 1:
-		return cryptoswitch.Camellia
+		return cryptoswitch.DES
 	case 2:
+		return cryptoswitch.Camellia
+	case 3:
 		return cryptoswitch.Twofish
 	}
 
@@ -52,16 +63,11 @@ func (w *Window) selectCipher() cryptoswitch.Cipher {
 }
 
 func (w *Window) selectMode() cryptoswitch.Mode {
-	index := w.uiWindow.CipherMode.CurrentIndex()
-	switch index {
-	case 0:
+	if w.uiWindow.GcmRadio.IsChecked() {
 		return cryptoswitch.GCM
-	case 1:
-		return cryptoswitch.CBC
 	}
 
-	w.uiWindow.Logs.Append("Неизвестный режим шифрования, использую GCM")
-	return 0
+	return cryptoswitch.CBC
 }
 
 func (w *Window) countCipherTextSymbols() {

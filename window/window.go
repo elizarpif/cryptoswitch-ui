@@ -1,8 +1,8 @@
 package window
 
 import (
+	"github.com/elizarpif/cryptoswitch"
 	"github.com/elizarpif/cryptoswitch-ui/ui"
-	"github.com/elizarpif/diploma-elliptic/cryptoswitch"
 )
 
 type Window struct {

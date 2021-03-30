@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/elizarpif/diploma-elliptic/cryptoswitch"
+	"github.com/elizarpif/cryptoswitch"
 )
 
 func (w *Window) GenerateKey() {
