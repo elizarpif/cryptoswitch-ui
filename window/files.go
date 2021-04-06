@@ -16,6 +16,9 @@ func (w *Window) selectFile() string {
 
 func (w *Window) SelectInFile() {
 	filename := w.selectFile()
+	if filename == "" {
+		return
+	}
 
 	if w.file != nil {
 		w.file.in = filename
@@ -29,6 +32,9 @@ func (w *Window) SelectInFile() {
 
 func (w *Window) SelectOutFile() {
 	filename := w.selectFile()
+	if filename == "" {
+		return
+	}
 
 	if w.file != nil {
 		w.file.out = filename

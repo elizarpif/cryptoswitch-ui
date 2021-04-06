@@ -20,7 +20,6 @@ func (w *Window) GenerateKey() {
 
 	w.uiWindow.ParamXEdit.SetText(privKey.X.String())
 	w.uiWindow.ParamYEdit.SetText(privKey.Y.String())
-	w.uiWindow.SecretKey.SetText(hex.EncodeToString(privKey.D.Bytes()))
 }
 
 func (w *Window) EncryptText() {
@@ -46,6 +45,7 @@ func (w *Window) EncryptText() {
 }
 
 func (w *Window) EncryptFile() {
+	//widgets.NewQPro
 	if w.file == nil {
 		w.addLog("Входной и выходной файлы не выбраны")
 		return
@@ -76,15 +76,16 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
+	if w.stopCipher {
+		w.stopCipher = false
+		w.addLog("Шифрование остановлено")
+		return
+	}
+
 	fileOut := w.file.out
 	if fileOut == "" {
 		w.addLog(fmt.Sprintf("Выходной файл не указан, будет создан файл с названием %s%s", filename, ".enc"))
 		fileOut = filename + ".enc"
-	}
-
-	if w.stopCipher {
-		w.addLog("Шифрование остановлено")
-		return
 	}
 
 	err = writeFile(encrypt, fileOut)
@@ -101,6 +102,7 @@ func (w *Window) Encrypt() {
 	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
 		w.EncryptText()
 	} else {
+		w.addLog("Шифрование файла начинается")
 		w.EncryptFile()
 	}
 }
@@ -136,15 +138,16 @@ func (w *Window) DecryptFile() {
 		return
 	}
 
+	if w.stopCipher {
+		w.stopCipher = false
+		w.addLog("Шифрование остановлено")
+		return
+	}
+
 	fileOut := w.file.out
 	if fileOut == "" {
 		fileOut = fileNameWithoutExtension(filename)
 		w.addLog(fmt.Sprintf("Выходной файл не указан, будет создан файл с названием %s", fileOut))
-	}
-
-	if w.stopCipher {
-		w.addLog("Шифрование остановлено")
-		return
 	}
 
 	err = writeFile(encrypt, fileOut)
@@ -184,6 +187,7 @@ func (w *Window) Decrypt() {
 	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
 		w.DecryptText()
 	} else {
+		w.addLog("Дешифрование файлы начинается")
 		w.DecryptFile()
 	}
 }

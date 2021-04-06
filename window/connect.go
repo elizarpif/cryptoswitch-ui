@@ -15,6 +15,10 @@ func (w *Window) Connect() {
 	ww.DecryptBtn.ConnectClicked(func(checked bool) {
 		go w.Decrypt()
 	})
+	ww.SelectFileBtn3.ConnectClicked(func(checked bool) {
+		w.addLog("Остановка...")
+		w.stopCipher = true
+	})
 
 	ww.GenerateBtn.ConnectClicked(func(checked bool) {
 		go w.GenerateKey()
