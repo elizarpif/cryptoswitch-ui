@@ -49,10 +49,20 @@ func (w *Window) EncryptText() {
 }
 
 func (w *Window) progress(fileLen int, done chan bool, ticker *time.Ticker) {
-	pbar := widgets.NewQProgressDialog2("Шифрование...", "", 0, fileLen, nil, core.Qt__Dialog)
+	cancel := make(chan bool)
+
+	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, fileLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
+
+	pbar.ConnectCanceled(func() {
+		w.stopCipher = true
+		cancel <- true
+	})
 
 	for {
 		select {
+		case <-cancel:
+			fmt.Println("cancel")
+			return
 		case <-done:
 			fmt.Println("ticker done")
 			pbar.SetValue(pbar.Maximum())
@@ -103,15 +113,17 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	//if w.stopCipher {
-	//	w.stopCipher = false
-	//	w.addLog("Шифрование остановлено")
-	//	return
-	//}
+	if w.stopCipher {
+		w.stopCipher = false
+		w.addLog("Шифрование остановлено")
+		return
+	}
+	ticker.Stop()
+	done <- true
+	fmt.Println("Ticker stopped")
 
 	fileOut := w.file.out
 	if fileOut == "" {
-		w.addLog(fmt.Sprintf("Выходной файл не указан, будет создан файл с названием %s%s", filename, ".enc"))
 		fileOut = filename + ".enc"
 	}
 
@@ -122,11 +134,8 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	w.addLog("Файл успешно зашифрован")
+	w.addLog(fmt.Sprintf("Файл успешно зашифрован и записан в %s", fileOut))
 
-	ticker.Stop()
-	done <- true
-	fmt.Println("Ticker stopped")
 }
 
 func (w *Window) Encrypt() {
