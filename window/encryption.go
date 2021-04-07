@@ -50,22 +50,21 @@ func (w *Window) EncryptText() {
 }
 
 func (w *Window) progress(pbar *widgets.QProgressDialog, fileLen int, done chan bool, ticker *time.Ticker) {
-
 	for {
-
 		select {
 		case <-done:
-			fmt.Println("ticker done")
-			pbar.SetValue(pbar.Maximum())
-			pbar.Close()
-			return
-		case t := <-ticker.C:
-			if pbar.WasCanceled() {
-				continue
+			if !pbar.WasCanceled() {
+				fmt.Println("ticker done")
+				pbar.SetValue(pbar.Maximum())
+				pbar.Close()
 			}
 
-			pbar.SetValue(pbar.Value() + fileLen/70)
-			fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
+			return
+		case t := <-ticker.C:
+			if !pbar.WasCanceled() {
+				pbar.SetValue(pbar.Value() + fileLen/70)
+				fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
+			}
 		}
 	}
 }
@@ -94,11 +93,15 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
+	isProgress := true
+
 	ticker := time.NewTicker(200 * time.Millisecond)
 	done := make(chan bool)
 	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, dataLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
 	pbar.ConnectCanceled(func() {
-		w.addLog("Шифрование остановлено")
+		if isProgress {
+			w.addLog("Шифрование остановлено")
+		}
 	})
 
 	go w.progress(pbar, dataLen, done, ticker)
@@ -115,6 +118,7 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
+	isProgress = false
 	ticker.Stop()
 	done <- true
 	fmt.Println("Ticker stopped")

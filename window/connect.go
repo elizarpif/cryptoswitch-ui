@@ -2,6 +2,7 @@ package window
 
 import (
 	"fmt"
+	"unicode/utf8"
 
 	"github.com/elizarpif/cryptoswitch"
 )
@@ -82,8 +83,9 @@ func (w *Window) countCipherTextSymbols() {
 	)
 }
 func (w *Window) countPlainTextSymbols() {
-	n := len(w.uiWindow.PlainText.ToPlainText())
+	text := w.uiWindow.PlainText.ToPlainText()
 
+	n := utf8.RuneCountInString(text)
 	w.uiWindow.LabelCountPlainText.SetText(
 		fmt.Sprintf("%s %d %s", countText, n, incline(n)),
 	)
