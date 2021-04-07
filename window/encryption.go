@@ -3,6 +3,9 @@ package window
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/widgets"
+	"time"
 
 	"github.com/elizarpif/cryptoswitch"
 )
@@ -35,17 +38,35 @@ func (w *Window) EncryptText() {
 
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
 
-	encrypt, err := sw.Encrypt(w.privKey.PublicKey, data)
+	encrypt, err := sw.Encrypt(w.privKey.PublicKey, &data)
 	if err != nil {
 		w.addErrLog(err)
 		return
 	}
 
-	w.uiWindow.CipherText.SetText(hex.EncodeToString(encrypt))
+	w.uiWindow.CipherText.SetText(hex.EncodeToString(*encrypt))
+}
+
+func (w *Window) progress(fileLen int, done chan bool, ticker *time.Ticker) {
+	pbar := widgets.NewQProgressDialog2("Шифрование...", "", 0, fileLen, nil, core.Qt__Dialog)
+
+
+	for {
+		select {
+		case <-done:
+			fmt.Println("ticker done")
+			pbar.SetValue(pbar.Maximum())
+			pbar.Close()
+			return
+		case t := <-ticker.C:
+			pbar.SetValue(pbar.Value()+fileLen/70)
+
+			fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
+		}
+	}
 }
 
 func (w *Window) EncryptFile() {
-	//widgets.NewQPro
 	if w.file == nil {
 		w.addLog("Входной и выходной файлы не выбраны")
 		return
@@ -59,14 +80,20 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	if len(data) == 0 {
+	dataLen := len(*data)
+	if dataLen == 0 {
 		return
 	}
 
 	if w.privKey == nil {
-		w.addLog("отсутствует ключ шифрования")
+		w.addLog("Отсутствует ключ шифрования")
 		return
 	}
+
+	ticker := time.NewTicker(200*time.Millisecond)
+	done := make(chan bool)
+
+	go w.progress(dataLen, done, ticker)
 
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
 
@@ -76,11 +103,11 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	if w.stopCipher {
-		w.stopCipher = false
-		w.addLog("Шифрование остановлено")
-		return
-	}
+	//if w.stopCipher {
+	//	w.stopCipher = false
+	//	w.addLog("Шифрование остановлено")
+	//	return
+	//}
 
 	fileOut := w.file.out
 	if fileOut == "" {
@@ -96,6 +123,10 @@ func (w *Window) EncryptFile() {
 	}
 
 	w.addLog("Файл успешно зашифрован")
+
+	ticker.Stop()
+	done <- true
+	fmt.Println("Ticker stopped")
 }
 
 func (w *Window) Encrypt() {
@@ -121,7 +152,7 @@ func (w *Window) DecryptFile() {
 		return
 	}
 
-	if len(data) == 0 {
+	if len(*data) == 0 {
 		return
 	}
 
@@ -174,13 +205,13 @@ func (w *Window) DecryptText() {
 
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
 
-	encrypt, err := sw.Decrypt(w.privKey, data)
+	encrypt, err := sw.Decrypt(w.privKey, &data)
 	if err != nil {
 		w.addErrLog(err)
 		return
 	}
 
-	w.uiWindow.CipherText.SetText(string(encrypt))
+	w.uiWindow.CipherText.SetText(string(*encrypt))
 }
 
 func (w *Window) Decrypt() {

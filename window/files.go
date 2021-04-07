@@ -45,17 +45,17 @@ func (w *Window) SelectOutFile() {
 	w.uiWindow.LabelOutFile.SetText(filename)
 }
 
-func openFile(filename string) ([]byte, error) {
+func openFile(filename string) (*[]byte, error) {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	return dat, nil
+	return &dat, nil
 }
 
-func writeFile(data []byte, filename string) error {
-	return ioutil.WriteFile(filename, data, 0777)
+func writeFile(data *[]byte, filename string) error {
+	return ioutil.WriteFile(filename, *data, 0777)
 }
 
 func fileNameWithoutExtension(fileName string) string {

@@ -5,6 +5,8 @@ github.com/elizarpif/camellia v0.0.5 h1:CZkoZIt6EmaKte5NyEiEpnxqoko4E5e4ADp5/+7W
 github.com/elizarpif/camellia v0.0.5/go.mod h1:vxFV+CPfhj42iVa+MI1ff5xWw86LMIEMsXIMohWxAgA=
 github.com/elizarpif/cryptoswitch v0.0.0-20210330180632-02788ff9792d h1:q5Sw3HOz0sz17nw+DG81MV3Ffgjv577iDQnfsfu+UjI=
 github.com/elizarpif/cryptoswitch v0.0.0-20210330180632-02788ff9792d/go.mod h1:LS1iY/1119XrWKfWEPEva7JKVeHdYvwPe0WQo0lpQrE=
+github.com/elizarpif/cryptoswitch v0.0.0-20210407212934-2eb5ba0a1645 h1:59gSQ6Uv0rBqI3kdaZVrkrVhyIFr9D926B/xY+fqwBU=
+github.com/elizarpif/cryptoswitch v0.0.0-20210407212934-2eb5ba0a1645/go.mod h1:LS1iY/1119XrWKfWEPEva7JKVeHdYvwPe0WQo0lpQrE=
 github.com/elizarpif/diploma-elliptic v0.0.0-20210314173816-bfe60c02b9ff h1:FJIYGuKBnfePYyLNV8g0264W4nq/aFs/zj5ZyPHUj7o=
 github.com/elizarpif/diploma-elliptic v0.0.0-20210314173816-bfe60c02b9ff/go.mod h1:gO6/5/5hu5G92yD1bx/54UM/w2E87kKL/5IacnBEA6g=
 github.com/elizarpif/logger v0.0.5/go.mod h1:QjsUh7v0Ehv5j1oYgtakLDkgF81x/Vr/ZucxJXjOj0Y=
