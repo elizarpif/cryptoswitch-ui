@@ -3,9 +3,10 @@ package window
 import (
 	"encoding/hex"
 	"fmt"
+	"time"
+
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
-	"time"
 
 	"github.com/elizarpif/cryptoswitch"
 )
@@ -50,7 +51,6 @@ func (w *Window) EncryptText() {
 func (w *Window) progress(fileLen int, done chan bool, ticker *time.Ticker) {
 	pbar := widgets.NewQProgressDialog2("Шифрование...", "", 0, fileLen, nil, core.Qt__Dialog)
 
-
 	for {
 		select {
 		case <-done:
@@ -59,7 +59,7 @@ func (w *Window) progress(fileLen int, done chan bool, ticker *time.Ticker) {
 			pbar.Close()
 			return
 		case t := <-ticker.C:
-			pbar.SetValue(pbar.Value()+fileLen/70)
+			pbar.SetValue(pbar.Value() + fileLen/70)
 
 			fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
 		}
@@ -90,7 +90,7 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	ticker := time.NewTicker(200*time.Millisecond)
+	ticker := time.NewTicker(200 * time.Millisecond)
 	done := make(chan bool)
 
 	go w.progress(dataLen, done, ticker)

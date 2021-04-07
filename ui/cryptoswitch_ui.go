@@ -8,41 +8,41 @@ import (
 )
 
 type UICryptoswitchMainWindow struct {
-	Centralwidget *widgets.QWidget
-	TabWidget *widgets.QTabWidget
-	Text *widgets.QWidget
-	PlainText *widgets.QTextEdit
-	LabelPlainText *widgets.QLabel
-	CipherText *widgets.QTextEdit
-	LabelCipherText *widgets.QLabel
-	LabelCountPlainText *widgets.QLabel
+	Centralwidget        *widgets.QWidget
+	TabWidget            *widgets.QTabWidget
+	Text                 *widgets.QWidget
+	PlainText            *widgets.QTextEdit
+	LabelPlainText       *widgets.QLabel
+	CipherText           *widgets.QTextEdit
+	LabelCipherText      *widgets.QLabel
+	LabelCountPlainText  *widgets.QLabel
 	LabelCountCipherText *widgets.QLabel
-	File *widgets.QWidget
-	SelectInFileBtn *widgets.QPushButton
-	LabelInFile *widgets.QLabel
-	LabelOutFile *widgets.QLabel
-	SelectOutFileBtn *widgets.QPushButton
-	DecryptBtn *widgets.QPushButton
-	EncryptBtn *widgets.QPushButton
-	ParamsGroup *widgets.QGroupBox
-	EllipticCurve *widgets.QComboBox
-	LabelCurve *widgets.QLabel
-	LabelX *widgets.QLabel
-	ParamXEdit *widgets.QLineEdit
-	LabelY *widgets.QLabel
-	ParamYEdit *widgets.QLineEdit
-	GenerateBtn *widgets.QPushButton
-	SelectFileBtn3 *widgets.QPushButton
-	Logs *widgets.QTextEdit
-	GroupBox2 *widgets.QGroupBox
-	GroupBox *widgets.QGroupBox
-	GcmRadio *widgets.QRadioButton
-	CbcRadio *widgets.QRadioButton
-	LabelCipherMode *widgets.QLabel
-	LabelAlgorithm *widgets.QLabel
-	CipherSwitch *widgets.QComboBox
-	Menubar *widgets.QMenuBar
-	Statusbar *widgets.QStatusBar
+	File                 *widgets.QWidget
+	SelectInFileBtn      *widgets.QPushButton
+	LabelInFile          *widgets.QLabel
+	LabelOutFile         *widgets.QLabel
+	SelectOutFileBtn     *widgets.QPushButton
+	DecryptBtn           *widgets.QPushButton
+	EncryptBtn           *widgets.QPushButton
+	ParamsGroup          *widgets.QGroupBox
+	EllipticCurve        *widgets.QComboBox
+	LabelCurve           *widgets.QLabel
+	LabelX               *widgets.QLabel
+	ParamXEdit           *widgets.QLineEdit
+	LabelY               *widgets.QLabel
+	ParamYEdit           *widgets.QLineEdit
+	GenerateBtn          *widgets.QPushButton
+	SelectFileBtn3       *widgets.QPushButton
+	Logs                 *widgets.QTextEdit
+	GroupBox2            *widgets.QGroupBox
+	GroupBox             *widgets.QGroupBox
+	GcmRadio             *widgets.QRadioButton
+	CbcRadio             *widgets.QRadioButton
+	LabelCipherMode      *widgets.QLabel
+	LabelAlgorithm       *widgets.QLabel
+	CipherSwitch         *widgets.QComboBox
+	Menubar              *widgets.QMenuBar
+	Statusbar            *widgets.QStatusBar
 }
 
 func (this *UICryptoswitchMainWindow) SetupUI(MainWindow *widgets.QMainWindow) {
@@ -243,13 +243,12 @@ func (this *UICryptoswitchMainWindow) SetupUI(MainWindow *widgets.QMainWindow) {
 	this.Statusbar.SetObjectName("Statusbar")
 	MainWindow.SetStatusBar(this.Statusbar)
 
-
-    this.RetranslateUi(MainWindow)
+	this.RetranslateUi(MainWindow)
 	this.TabWidget.SetCurrentIndex(0)
 }
 
 func (this *UICryptoswitchMainWindow) RetranslateUi(MainWindow *widgets.QMainWindow) {
-    _translate := core.QCoreApplication_Translate
+	_translate := core.QCoreApplication_Translate
 	MainWindow.SetWindowTitle(_translate("MainWindow", "CryptoSwitch", "", -1))
 	this.LabelPlainText.SetText(_translate("MainWindow", "Текст для шифрования/расшифрования", "", -1))
 	this.LabelCipherText.SetText(_translate("MainWindow", "Зашифрованный/Расшифрованный текст", "", -1))
