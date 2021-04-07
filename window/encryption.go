@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/therecipe/qt/core"
+
 	"github.com/therecipe/qt/widgets"
 
 	"github.com/elizarpif/cryptoswitch"
@@ -48,29 +49,22 @@ func (w *Window) EncryptText() {
 	w.uiWindow.CipherText.SetText(hex.EncodeToString(*encrypt))
 }
 
-func (w *Window) progress(fileLen int, done chan bool, ticker *time.Ticker) {
-	cancel := make(chan bool)
-
-	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, fileLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
-
-	pbar.ConnectCanceled(func() {
-		w.stopCipher = true
-		cancel <- true
-	})
+func (w *Window) progress(pbar *widgets.QProgressDialog, fileLen int, done chan bool, ticker *time.Ticker) {
 
 	for {
+
 		select {
-		case <-cancel:
-			fmt.Println("cancel")
-			return
 		case <-done:
 			fmt.Println("ticker done")
 			pbar.SetValue(pbar.Maximum())
 			pbar.Close()
 			return
 		case t := <-ticker.C:
-			pbar.SetValue(pbar.Value() + fileLen/70)
+			if pbar.WasCanceled() {
+				continue
+			}
 
+			pbar.SetValue(pbar.Value() + fileLen/70)
 			fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
 		}
 	}
@@ -102,8 +96,12 @@ func (w *Window) EncryptFile() {
 
 	ticker := time.NewTicker(200 * time.Millisecond)
 	done := make(chan bool)
+	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, dataLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
+	pbar.ConnectCanceled(func() {
+		w.addLog("Шифрование остановлено")
+	})
 
-	go w.progress(dataLen, done, ticker)
+	go w.progress(pbar, dataLen, done, ticker)
 
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
 
@@ -113,11 +111,10 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
-	if w.stopCipher {
-		w.stopCipher = false
-		w.addLog("Шифрование остановлено")
+	if pbar.WasCanceled() {
 		return
 	}
+
 	ticker.Stop()
 	done <- true
 	fmt.Println("Ticker stopped")
@@ -135,7 +132,6 @@ func (w *Window) EncryptFile() {
 	}
 
 	w.addLog(fmt.Sprintf("Файл успешно зашифрован и записан в %s", fileOut))
-
 }
 
 func (w *Window) Encrypt() {
