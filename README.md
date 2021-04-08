@@ -12,4 +12,4 @@ goqtuic -go-test-file ui/cryptoswitch.ui -go-ui-dir ui/
 
 ![Шифрование файла](https://github.com/elizarpif/cryptoswitch-ui/blob/develop/assets/2.png)
 
-![Шифрование файла](https://github.com/elizarpif/cryptoswitch-ui/blob/develop/assets/record3.mov)
+![Образец работы программы (видео)](https://github.com/elizarpif/cryptoswitch-ui/blob/develop/assets/record.mov)
