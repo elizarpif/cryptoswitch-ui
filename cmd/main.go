@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	//runtime.GOMAXPROCS(2)
+
 	// needs to be called once before you can start using the QWidgets
 	app := widgets.NewQApplication(len(os.Args), os.Args)
 

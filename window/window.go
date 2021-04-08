@@ -8,9 +8,8 @@ import (
 type Window struct {
 	uiWindow *ui.UICryptoswitchMainWindow
 
-	stopCipher bool
-	privKey    *cryptoswitch.PrivateKey
-	file       *File
+	privKey *cryptoswitch.PrivateKey
+	file    *File
 }
 
 type File struct {
