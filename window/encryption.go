@@ -70,6 +70,7 @@ func (w *Window) progress(pbar *widgets.QProgressDialog, fileLen int, done chan 
 }
 
 func (w *Window) EncryptFile() {
+	// читаем файлик
 	if w.file == nil {
 		w.addLog("Входной и выходной файлы не выбраны")
 		return
@@ -93,10 +94,13 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
+	// флаг для лога при остановке прогрессбара
 	isProgress := true
 
+	// тикер и канал для работы прогресс бара
 	ticker := time.NewTicker(200 * time.Millisecond)
 	done := make(chan bool)
+
 	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, dataLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
 	pbar.ConnectCanceled(func() {
 		if isProgress {
@@ -104,6 +108,9 @@ func (w *Window) EncryptFile() {
 		}
 	})
 
+	t1 := time.Now()
+
+	// в горутине занимаемся отображением прогресс бара
 	go w.progress(pbar, dataLen, done, ticker)
 
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
@@ -114,15 +121,21 @@ func (w *Window) EncryptFile() {
 		return
 	}
 
+	// смотрим, вдруг пользователь нажал отмену
 	if pbar.WasCanceled() {
 		return
 	}
 
+	// иначе завершаем прогресс бар
 	isProgress = false
 	ticker.Stop()
 	done <- true
 	fmt.Println("Ticker stopped")
 
+	t2 := time.Now()
+	fmt.Printf("t2-t1=%d microseconds (%s); dataLen(bytes) = %d\n", t2.Sub(t1).Microseconds(), t2.Sub(t1).String(), dataLen)
+
+	// собираем выходной файл
 	fileOut := w.file.out
 	if fileOut == "" {
 		fileOut = filename + ".enc"
