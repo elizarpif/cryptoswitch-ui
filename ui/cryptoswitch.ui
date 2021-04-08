@@ -18,7 +18,10 @@
   </property>
   <property name="font">
    <font>
-    <family>Ubuntu</family>
+    <pointsize>-1</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
    </font>
   </property>
   <property name="windowTitle">
@@ -38,6 +41,7 @@ QWidget
 {
  color: #b1b1b1;
  background-color: #323232;
+ font: 12px;
 }
 
 QWidget:item:hover
@@ -125,10 +129,10 @@ QPushButton
  border-width: 1px;
  border-color: #1e1e1e;
  border-style: solid;
- border-radius: 6;
- padding: 3px;
- padding-left: 5px;
- padding-right: 5px;
+ border-radius: 5;
+ padding: 1px;
+ padding-left: 1px;
+ padding-right: 1px;
 }
 
 QPushButton:pressed
@@ -371,15 +375,14 @@ QMenu::separator
 
 QProgressBar
 {
- border: 2px solid grey;
- border-radius: 5px;
+ border: 5px solid #323232;
  text-align: center;
 }
 
 QProgressBar::chunk
 {
  background-color: #d7801a;
- width: 2.15px;
+ width: 2px;
  margin: 0.5px;
 }
 
@@ -491,16 +494,18 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>310</y>
+      <x>60</x>
+      <y>320</y>
       <width>601</width>
       <height>421</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="currentIndex">
@@ -509,8 +514,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
     <widget class="QWidget" name="text">
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <attribute name="title">
@@ -527,8 +534,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -546,8 +555,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -565,8 +576,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="readOnly">
@@ -584,8 +597,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -603,9 +618,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -623,9 +639,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -661,7 +678,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <italic>true</italic>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -679,7 +699,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <italic>true</italic>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -704,17 +727,18 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QPushButton" name="decryptBtn">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>800</y>
-      <width>211</width>
+      <x>370</x>
+      <y>760</y>
+      <width>291</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
-      <pointsize>14</pointsize>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
@@ -724,17 +748,18 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QPushButton" name="encryptBtn">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>750</y>
-      <width>211</width>
+      <x>60</x>
+      <y>760</y>
+      <width>301</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
-      <pointsize>14</pointsize>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
@@ -744,17 +769,18 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QGroupBox" name="ParamsGroup">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>20</y>
-      <width>271</width>
+      <x>60</x>
+      <y>30</y>
+      <width>301</width>
       <height>201</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
-      <pointsize>14</pointsize>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="title">
@@ -771,8 +797,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <item>
@@ -792,8 +820,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -811,8 +841,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -830,8 +862,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="readOnly">
@@ -849,8 +883,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -868,8 +904,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="readOnly">
@@ -880,55 +918,39 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QPushButton" name="GenerateBtn">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>240</y>
-      <width>271</width>
+      <x>60</x>
+      <y>250</y>
+      <width>301</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
      <string>Сгенерировать</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="selectFileBtn_3">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>750</y>
-      <width>211</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>14</pointsize>
-      <italic>false</italic>
-     </font>
-    </property>
-    <property name="text">
-     <string>Отменить</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="logs">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>850</y>
+      <x>60</x>
+      <y>820</y>
       <width>601</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="readOnly">
@@ -938,16 +960,18 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>20</y>
-      <width>281</width>
+      <x>400</x>
+      <y>30</y>
+      <width>261</width>
       <height>261</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Ubuntu</family>
+      <pointsize>-1</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="title">
@@ -964,8 +988,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="title">
@@ -982,9 +1008,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -1002,9 +1029,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu</family>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -1026,9 +1054,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
-       <pointsize>14</pointsize>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -1046,9 +1075,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
-       <pointsize>14</pointsize>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="text">
@@ -1066,8 +1096,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <item>
@@ -1099,7 +1131,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      <x>0</x>
      <y>0</y>
      <width>721</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

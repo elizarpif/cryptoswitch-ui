@@ -2,6 +2,7 @@ package window
 
 import (
 	"fmt"
+	"runtime"
 	"unicode/utf8"
 
 	"github.com/elizarpif/cryptoswitch"
@@ -15,10 +16,6 @@ func (w *Window) Connect() {
 	})
 	ww.DecryptBtn.ConnectClicked(func(checked bool) {
 		go w.Decrypt()
-	})
-	ww.SelectFileBtn3.ConnectClicked(func(checked bool) {
-		w.addLog("Остановка...")
-		w.stopCipher = true
 	})
 
 	ww.GenerateBtn.ConnectClicked(func(checked bool) {
@@ -75,20 +72,63 @@ func (w *Window) selectMode() cryptoswitch.Mode {
 	return cryptoswitch.CBC
 }
 
+func (w *Window) GenerateKey() {
+	var err error
+	defer w.addErrLog(err)
+
+	privKey, err := cryptoswitch.GenerateKey()
+	if err != nil {
+		return
+	}
+
+	w.privKey = privKey
+
+	w.uiWindow.ParamXEdit.SetText(privKey.X.String())
+	w.uiWindow.ParamYEdit.SetText(privKey.Y.String())
+}
+
+func (w *Window) Encrypt() {
+	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
+		w.EncryptText()
+	} else {
+		w.addLog("Шифрование файла начинается")
+		w.EncryptFile()
+		runtime.GC()
+	}
+}
+
+func (w *Window) Decrypt() {
+	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
+		w.DecryptText()
+	} else {
+		w.addLog("Дешифрование файла начинается")
+		w.DecryptFile()
+		runtime.GC()
+	}
+}
+
 func (w *Window) countCipherTextSymbols() {
-	n := len(w.uiWindow.CipherText.ToPlainText())
+	text := w.uiWindow.CipherText.ToPlainText()
+
+	n := w.countSymbols(text)
 
 	w.uiWindow.LabelCountCipherText.SetText(
 		fmt.Sprintf("%s %d %s", countText, n, incline(n)),
 	)
 }
+
 func (w *Window) countPlainTextSymbols() {
 	text := w.uiWindow.PlainText.ToPlainText()
 
-	n := utf8.RuneCountInString(text)
+	n := w.countSymbols(text)
+
 	w.uiWindow.LabelCountPlainText.SetText(
 		fmt.Sprintf("%s %d %s", countText, n, incline(n)),
 	)
+}
+
+func (w *Window) countSymbols(text string) int {
+	return utf8.RuneCountInString(text)
 }
 
 const countText = "Размер введенного текста:"

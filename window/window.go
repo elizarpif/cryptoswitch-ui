@@ -1,8 +1,6 @@
 package window
 
 import (
-	"sync"
-
 	"github.com/elizarpif/cryptoswitch"
 	"github.com/elizarpif/cryptoswitch-ui/ui"
 )
@@ -10,10 +8,8 @@ import (
 type Window struct {
 	uiWindow *ui.UICryptoswitchMainWindow
 
-	stopCipher bool
-	mutex      sync.Mutex
-	privKey    *cryptoswitch.PrivateKey
-	file       *File
+	privKey *cryptoswitch.PrivateKey
+	file    *File
 }
 
 type File struct {

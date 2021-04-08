@@ -5,31 +5,41 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/therecipe/qt/core"
-
-	"github.com/therecipe/qt/widgets"
-
 	"github.com/elizarpif/cryptoswitch"
+	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/widgets"
 )
 
-func (w *Window) GenerateKey() {
-	var err error
-	defer w.addErrLog(err)
-
-	privKey, err := cryptoswitch.GenerateKey()
-	if err != nil {
-		return
-	}
-
-	w.privKey = privKey
-
-	w.uiWindow.ParamXEdit.SetText(privKey.X.String())
-	w.uiWindow.ParamYEdit.SetText(privKey.Y.String())
+func (w *Window) EncryptText() {
+	w.operationText(true)
 }
 
-func (w *Window) EncryptText() {
-	data := []byte(w.uiWindow.PlainText.ToPlainText())
-	if len(data) == 0 {
+func (w *Window) DecryptText() {
+	w.operationText(false)
+}
+
+func getTextData(text string, encrypt bool) (*[]byte, error) {
+	if encrypt {
+		data := []byte(text)
+		return &data, nil
+	}
+
+	data, err := hex.DecodeString(text)
+	return &data, err
+}
+
+func resultTextData(text *[]byte, encrypt bool) string {
+	if encrypt {
+		return hex.EncodeToString(*text)
+	}
+
+	return string(*text)
+}
+
+func (w *Window) operationText(encrypt bool) {
+	data, err := getTextData(w.uiWindow.PlainText.ToPlainText(), encrypt)
+	if err != nil {
+		w.addErrLog(err)
 		return
 	}
 
@@ -38,38 +48,98 @@ func (w *Window) EncryptText() {
 		return
 	}
 
-	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
-
-	encrypt, err := sw.Encrypt(w.privKey.PublicKey, &data)
+	encrypted, err := w.operation(data, encrypt)
 	if err != nil {
 		w.addErrLog(err)
 		return
 	}
 
-	w.uiWindow.CipherText.SetText(hex.EncodeToString(*encrypt))
+	w.uiWindow.CipherText.SetText(resultTextData(encrypted, encrypt))
 }
 
+const (
+	BYTE = 1 << (10 * iota)
+	KILOBYTE
+	MEGABYTE
+	GIGABYTE
+)
+
+func getTickerTime(dataLen int, cipher cryptoswitch.Cipher) time.Duration {
+	t := 4
+	if cipher == cryptoswitch.AES {
+		t = 1
+	}
+
+	if dataLen >= GIGABYTE {
+		return time.Duration(200*t) * time.Millisecond
+	}
+	if dataLen >= MEGABYTE {
+		return time.Duration(80*t) * time.Millisecond
+	}
+	return time.Millisecond
+}
+
+func (w *Window) getOutFilename(filename string, encrypt bool) string {
+	fileOut := w.file.out
+	if fileOut != "" {
+		return fileOut
+	}
+
+	if encrypt {
+		return filename + ".enc"
+	}
+
+	return fileNameWithoutExtension(filename)
+}
+
+// шифрование либо дешифрование
+func (w *Window) operation(data *[]byte, encrypt bool) (*[]byte, error) {
+	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
+	if encrypt {
+		return sw.Encrypt(w.privKey.PublicKey, data)
+	}
+
+	return sw.Decrypt(w.privKey, data)
+}
+
+func resultLog(encrypt bool, fileOut string) string {
+	if encrypt {
+		return fmt.Sprintf("Файл успешно зашифрован и записан в %s", fileOut)
+	}
+
+	return fmt.Sprintf("Файл успешно расшифрован и записан в %s", fileOut)
+}
+
+func operationType(encrypt bool) string {
+	if encrypt {
+		return "Шифрование"
+	}
+
+	return "Дешифрование"
+}
+
+// изменение прогресса и проверка "готово ли"
 func (w *Window) progress(pbar *widgets.QProgressDialog, fileLen int, done chan bool, ticker *time.Ticker) {
 	for {
 		select {
 		case <-done:
 			if !pbar.WasCanceled() {
-				fmt.Println("ticker done")
+				pbar.SetValue(pbar.Maximum() - 1)
+				time.Sleep(time.Millisecond * 10)
 				pbar.SetValue(pbar.Maximum())
 				pbar.Close()
 			}
 
 			return
-		case t := <-ticker.C:
+		case <-ticker.C:
 			if !pbar.WasCanceled() {
-				pbar.SetValue(pbar.Value() + fileLen/70)
-				fmt.Printf("Tick at %d , value %d\n", t, pbar.Value())
+				pbar.SetValue(pbar.Value() + fileLen/50)
 			}
 		}
 	}
 }
 
-func (w *Window) EncryptFile() {
+func (w *Window) operationFile(encrypt bool) {
 	// читаем файлик
 	if w.file == nil {
 		w.addLog("Входной и выходной файлы не выбраны")
@@ -98,24 +168,21 @@ func (w *Window) EncryptFile() {
 	isProgress := true
 
 	// тикер и канал для работы прогресс бара
-	ticker := time.NewTicker(200 * time.Millisecond)
+	ticker := time.NewTicker(getTickerTime(dataLen, w.selectCipher()))
 	done := make(chan bool)
 
-	pbar := widgets.NewQProgressDialog2("Шифрование...", "Отмена", 0, dataLen, w.uiWindow.Centralwidget, core.Qt__Dialog)
+	pbar := widgets.NewQProgressDialog2(fmt.Sprintf("%s...", operationType(encrypt)), "Отмена", 0,
+		dataLen, w.uiWindow.Centralwidget, core.Qt__Widget)
 	pbar.ConnectCanceled(func() {
 		if isProgress {
-			w.addLog("Шифрование остановлено")
+			w.addLog(fmt.Sprintf("%s остановлено", operationType(encrypt)))
 		}
 	})
-
-	t1 := time.Now()
 
 	// в горутине занимаемся отображением прогресс бара
 	go w.progress(pbar, dataLen, done, ticker)
 
-	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
-
-	encrypt, err := sw.Encrypt(w.privKey.PublicKey, data)
+	encrypted, err := w.operation(data, encrypt)
 	if err != nil {
 		w.addErrLog(err)
 		return
@@ -130,117 +197,24 @@ func (w *Window) EncryptFile() {
 	isProgress = false
 	ticker.Stop()
 	done <- true
-	fmt.Println("Ticker stopped")
-
-	t2 := time.Now()
-	fmt.Printf("t2-t1=%d microseconds (%s); dataLen(bytes) = %d\n", t2.Sub(t1).Microseconds(), t2.Sub(t1).String(), dataLen)
 
 	// собираем выходной файл
-	fileOut := w.file.out
-	if fileOut == "" {
-		fileOut = filename + ".enc"
-	}
+	fileOut := w.getOutFilename(filename, encrypt)
 
-	err = writeFile(encrypt, fileOut)
+	err = writeFile(encrypted, fileOut)
 	if err != nil {
 		w.addErrLog(err)
 		w.addLog("Не получается записать файл")
 		return
 	}
 
-	w.addLog(fmt.Sprintf("Файл успешно зашифрован и записан в %s", fileOut))
+	w.addLog(resultLog(encrypt, fileOut))
 }
 
-func (w *Window) Encrypt() {
-	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
-		w.EncryptText()
-	} else {
-		w.addLog("Шифрование файла начинается")
-		w.EncryptFile()
-	}
+func (w *Window) EncryptFile() {
+	w.operationFile(true)
 }
 
 func (w *Window) DecryptFile() {
-	if w.file == nil {
-		w.addLog("Входной и выходной файлы не выбраны")
-		return
-	}
-
-	filename := w.file.in
-
-	data, err := openFile(filename)
-	if err != nil {
-		w.addLog(fmt.Sprintf("Не получается открыть файл: %s", filename))
-		return
-	}
-
-	if len(*data) == 0 {
-		return
-	}
-
-	if w.privKey == nil {
-		w.addLog("отсутствует ключ шифрования")
-		return
-	}
-
-	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
-
-	encrypt, err := sw.Decrypt(w.privKey, data)
-	if err != nil {
-		w.addErrLog(err)
-		return
-	}
-
-	if w.stopCipher {
-		w.stopCipher = false
-		w.addLog("Шифрование остановлено")
-		return
-	}
-
-	fileOut := w.file.out
-	if fileOut == "" {
-		fileOut = fileNameWithoutExtension(filename)
-		w.addLog(fmt.Sprintf("Выходной файл не указан, будет создан файл с названием %s", fileOut))
-	}
-
-	err = writeFile(encrypt, fileOut)
-	if err != nil {
-		w.addErrLog(err)
-		w.addLog("Не получается записать файл")
-		return
-	}
-
-	w.addLog("Файл успешно расшифрован")
-}
-
-func (w *Window) DecryptText() {
-	data, err := hex.DecodeString(w.uiWindow.PlainText.ToPlainText())
-	if err != nil {
-		w.addErrLog(err)
-		return
-	}
-
-	if w.privKey == nil {
-		w.addLog("отсутствует ключ шифрования")
-		return
-	}
-
-	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
-
-	encrypt, err := sw.Decrypt(w.privKey, &data)
-	if err != nil {
-		w.addErrLog(err)
-		return
-	}
-
-	w.uiWindow.CipherText.SetText(string(*encrypt))
-}
-
-func (w *Window) Decrypt() {
-	if w.uiWindow.TabWidget.CurrentIndex() == 0 {
-		w.DecryptText()
-	} else {
-		w.addLog("Дешифрование файлы начинается")
-		w.DecryptFile()
-	}
+	w.operationFile(false)
 }

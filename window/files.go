@@ -8,7 +8,7 @@ import (
 )
 
 func (w *Window) selectFile() string {
-	filename := widgets.NewQFileDialog2(nil, "Open Dialog", "", "").
+	filename := widgets.NewQFileDialog2(w.uiWindow.Centralwidget, "Open Dialog", "", "").
 		GetOpenFileName(nil, "", "", "", "", 0)
 
 	return filename
