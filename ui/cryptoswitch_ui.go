@@ -8,40 +8,44 @@ import (
 )
 
 type UICryptoswitchMainWindow struct {
-	Centralwidget        *widgets.QWidget
-	TabWidget            *widgets.QTabWidget
-	Text                 *widgets.QWidget
-	PlainText            *widgets.QTextEdit
-	LabelPlainText       *widgets.QLabel
-	CipherText           *widgets.QTextEdit
-	LabelCipherText      *widgets.QLabel
-	LabelCountPlainText  *widgets.QLabel
+	Centralwidget *widgets.QWidget
+	TabWidget *widgets.QTabWidget
+	Text *widgets.QWidget
+	PlainText *widgets.QTextEdit
+	LabelPlainText *widgets.QLabel
+	CipherText *widgets.QTextEdit
+	LabelCipherText *widgets.QLabel
+	LabelCountPlainText *widgets.QLabel
 	LabelCountCipherText *widgets.QLabel
-	File                 *widgets.QWidget
-	SelectInFileBtn      *widgets.QPushButton
-	LabelInFile          *widgets.QLabel
-	LabelOutFile         *widgets.QLabel
-	SelectOutFileBtn     *widgets.QPushButton
-	DecryptBtn           *widgets.QPushButton
-	EncryptBtn           *widgets.QPushButton
-	ParamsGroup          *widgets.QGroupBox
-	EllipticCurve        *widgets.QComboBox
-	LabelCurve           *widgets.QLabel
-	LabelX               *widgets.QLabel
-	ParamXEdit           *widgets.QLineEdit
-	LabelY               *widgets.QLabel
-	ParamYEdit           *widgets.QLineEdit
-	GenerateBtn          *widgets.QPushButton
-	Logs                 *widgets.QTextEdit
-	GroupBox2            *widgets.QGroupBox
-	GroupBox             *widgets.QGroupBox
-	GcmRadio             *widgets.QRadioButton
-	CbcRadio             *widgets.QRadioButton
-	LabelCipherMode      *widgets.QLabel
-	LabelAlgorithm       *widgets.QLabel
-	CipherSwitch         *widgets.QComboBox
-	Menubar              *widgets.QMenuBar
-	Statusbar            *widgets.QStatusBar
+	File *widgets.QWidget
+	SelectInFileBtn *widgets.QPushButton
+	LabelInFile *widgets.QLabel
+	LabelOutFile *widgets.QLabel
+	SelectOutFileBtn *widgets.QPushButton
+	DecryptBtn *widgets.QPushButton
+	EncryptBtn *widgets.QPushButton
+	ParamsGroup *widgets.QGroupBox
+	EllipticCurve *widgets.QComboBox
+	LabelCurve *widgets.QLabel
+	LabelX *widgets.QLabel
+	ParamXEdit *widgets.QLineEdit
+	LabelY *widgets.QLabel
+	ParamYEdit *widgets.QLineEdit
+	GenerateBtn *widgets.QPushButton
+	Logs *widgets.QTextEdit
+	GroupBox2 *widgets.QGroupBox
+	GroupBox *widgets.QGroupBox
+	GcmRadio *widgets.QRadioButton
+	CbcRadio *widgets.QRadioButton
+	LabelCipherMode *widgets.QLabel
+	LabelAlgorithm *widgets.QLabel
+	CipherSwitch *widgets.QComboBox
+	Menubar *widgets.QMenuBar
+	MenuMenu *widgets.QMenu
+	Statusbar *widgets.QStatusBar
+	ActionProgram *widgets.QAction
+	ActionAuthor *widgets.QAction
+	ActionExit *widgets.QAction
 }
 
 func (this *UICryptoswitchMainWindow) SetupUI(MainWindow *widgets.QMainWindow) {
@@ -277,17 +281,35 @@ func (this *UICryptoswitchMainWindow) SetupUI(MainWindow *widgets.QMainWindow) {
 	this.Menubar = widgets.NewQMenuBar(MainWindow)
 	this.Menubar.SetObjectName("Menubar")
 	this.Menubar.SetGeometry(core.NewQRect4(0, 0, 721, 22))
+
+	this.MenuMenu = widgets.NewQMenu(this.Menubar)
+	this.MenuMenu.SetObjectName("MenuMenu")
 	MainWindow.SetMenuBar(this.Menubar)
+
 	this.Statusbar = widgets.NewQStatusBar(MainWindow)
 	this.Statusbar.SetObjectName("Statusbar")
 	MainWindow.SetStatusBar(this.Statusbar)
 
-	this.RetranslateUi(MainWindow)
+	this.ActionProgram = widgets.NewQAction(MainWindow)
+	this.ActionProgram.SetObjectName("actionProgram")
+	this.ActionAuthor = widgets.NewQAction(MainWindow)
+	this.ActionAuthor.SetObjectName("actionAuthor")
+	this.ActionExit = widgets.NewQAction(MainWindow)
+	this.ActionExit.SetObjectName("actionExit")
+	this.MenuMenu.QWidget.AddAction(this.ActionProgram)
+	this.MenuMenu.QWidget.AddAction(this.ActionAuthor)
+	this.MenuMenu.QWidget.AddAction(this.ActionExit)
+
+	menuAction := this.MenuMenu.MenuAction()
+	this.Menubar.QWidget.AddAction(menuAction)
+
+
+    this.RetranslateUi(MainWindow)
 	this.TabWidget.SetCurrentIndex(0)
 }
 
 func (this *UICryptoswitchMainWindow) RetranslateUi(MainWindow *widgets.QMainWindow) {
-	_translate := core.QCoreApplication_Translate
+    _translate := core.QCoreApplication_Translate
 	MainWindow.SetWindowTitle(_translate("MainWindow", "CryptoSwitch", "", -1))
 	this.LabelPlainText.SetText(_translate("MainWindow", "Текст для шифрования/расшифрования", "", -1))
 	this.LabelCipherText.SetText(_translate("MainWindow", "Зашифрованный/Расшифрованный текст", "", -1))
@@ -317,4 +339,8 @@ func (this *UICryptoswitchMainWindow) RetranslateUi(MainWindow *widgets.QMainWin
 	this.CipherSwitch.SetItemText(1, _translate("MainWindow", "DES", "", -1))
 	this.CipherSwitch.SetItemText(2, _translate("MainWindow", "Camellia", "", -1))
 	this.CipherSwitch.SetItemText(3, _translate("MainWindow", "TwoFish", "", -1))
+	this.MenuMenu.SetTitle(_translate("MainWindow", "Меню", "", -1))
+	this.ActionProgram.SetText(_translate("MainWindow", "О программе", "", -1))
+	this.ActionAuthor.SetText(_translate("MainWindow", "Об авторе", "", -1))
+	this.ActionExit.SetText(_translate("MainWindow", "Выход", "", -1))
 }

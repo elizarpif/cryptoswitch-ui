@@ -45,6 +45,12 @@ func (w *Window) Connect() {
 	ww.SelectOutFileBtn.ConnectClicked(func(checked bool) {
 		w.SelectOutFile()
 	})
+
+	//w.uiWindow.Menubar = widgets.NewQMenuBar(w.uiWindow.Centralwidget)
+	//menu := widgets.NewQMenu2("Меню", nil)
+	//menu.AddAction("Some")
+	//
+	//w.uiWindow.Menubar.AddMenu(menu)
 }
 
 func (w *Window) selectCipher() cryptoswitch.Cipher {
