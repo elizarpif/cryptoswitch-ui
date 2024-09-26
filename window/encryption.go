@@ -2,6 +2,7 @@ package window
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"time"
 
@@ -25,7 +26,10 @@ func getTextData(text string, encrypt bool) (*[]byte, error) {
 	}
 
 	data, err := hex.DecodeString(text)
-	return &data, err
+	if err != nil {
+		return nil, errors.New("Не могу расшифровать")
+	}
+	return &data, nil
 }
 
 func resultTextData(text *[]byte, encrypt bool) string {
@@ -44,13 +48,13 @@ func (w *Window) operationText(encrypt bool) {
 	}
 
 	if w.privKey == nil {
-		w.addLog("отсутствует ключ шифрования")
+		w.addErrLog(errors.New("Отсутствует ключ шифрования"))
 		return
 	}
 
 	encrypted, err := w.operation(data, encrypt)
 	if err != nil {
-		w.addErrLog(err)
+		w.addErrLog(fmt.Errorf("Не могу выполнить операцию. Ошибка %s", err.Error()))
 		return
 	}
 
@@ -93,7 +97,7 @@ func (w *Window) getOutFilename(filename string, encrypt bool) string {
 }
 
 // шифрование либо дешифрование
-func (w *Window) operation(data *[]byte, encrypt bool) (*[]byte, error) {
+func (w *Window) operation(data *[]byte, encrypt bool) (res *[]byte, err error) {
 	sw := cryptoswitch.NewCryptoSwitch(w.selectCipher(), w.selectMode())
 	if encrypt {
 		return sw.Encrypt(w.privKey.PublicKey, data)
@@ -160,7 +164,7 @@ func (w *Window) operationFile(encrypt bool) {
 	}
 
 	if w.privKey == nil {
-		w.addLog("Отсутствует ключ шифрования")
+		w.addErrLog(errors.New("Отсутствует ключ шифрования"))
 		return
 	}
 
@@ -184,7 +188,8 @@ func (w *Window) operationFile(encrypt bool) {
 
 	encrypted, err := w.operation(data, encrypt)
 	if err != nil {
-		w.addErrLog(err)
+		w.addErrLog(fmt.Errorf("Не могу выполнить операцию. Ошибка %s", err.Error()))
+		pbar.Close()
 		return
 	}
 
