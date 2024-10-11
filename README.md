@@ -1,5 +1,6 @@
 ## Grafic shell for the library [cryptoswitch](https://github.com/elizarpif/diploma-elliptic)
 
+A desktop encryption application that I created for my undergraduate work.
 
 ## Build
 
