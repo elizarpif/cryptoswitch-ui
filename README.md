@@ -1,6 +1,6 @@
 ## Grafic shell for the library [cryptoswitch](https://github.com/elizarpif/diploma-elliptic)
 
-A desktop encryption application that I created for my bachelor degree work. This app serves as a graphic shell for the library [cryptoswitch](https://github.com/elizarpif/cryptoswitch)
+A desktop encryption application that I created for my bachelor degree work. This app serves as a graphic shell for the library [cryptoswitch](https://github.com/elizarpif/cryptoswitch) that ensures data safety based on elliptic curves.
 
 ## Build
 
